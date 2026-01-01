@@ -141,8 +141,10 @@ function renderBarChartRace() {
     if (!containerNode) return;
     
     const width = containerNode.getBoundingClientRect().width;
-    const height = Math.min(1000, processedData.allStates.length * 28 + 100);
-    const margin = { top: 40, right: 200, bottom: 40, left: 150 };
+    // Show top 25 states to reduce clutter
+    const maxStatesToShow = 25;
+    const height = maxStatesToShow * 35 + 100;
+    const margin = { top: 40, right: 200, bottom: 40, left: 180 };
 
     const svg = d3.select('#bar-race-svg')
         .attr('width', width)
@@ -151,7 +153,7 @@ function renderBarChartRace() {
     // Get data for current year
     const yearData = processedData.byYear[currentRaceYear] || [];
     
-    // Sort by selected metric (descending)
+    // Sort by selected metric (descending) and limit to top states
     const sortedData = yearData
         .map(d => ({
             state: d.state,
@@ -159,7 +161,8 @@ function renderBarChartRace() {
             rate: d.rate,
             value: raceMetric === 'deaths' ? d.deaths : d.rate
         }))
-        .sort((a, b) => b.value - a.value);
+        .sort((a, b) => b.value - a.value)
+        .slice(0, maxStatesToShow); // Show only top states
 
     if (sortedData.length === 0) return;
 
@@ -172,7 +175,7 @@ function renderBarChartRace() {
     const yScale = d3.scaleBand()
         .domain(sortedData.map(d => d.state))
         .range([margin.top, height - margin.bottom])
-        .padding(0.2);
+        .padding(0.3); // Increased padding for more space between bars
 
     // Color scale
     const colorScale = d3.scaleSequential(d3.interpolateYlOrRd)
@@ -193,8 +196,8 @@ function renderBarChartRace() {
         gridG = svg.append('g').attr('class', 'grid-group');
     }
 
-    // Update grid lines
-    const xTicks = xScale.ticks(5);
+    // Update grid lines - match axis ticks
+    const xTicks = xScale.ticks(4);
     const gridLines = gridG.selectAll('.grid-line')
         .data(xTicks, d => d);
 
@@ -212,14 +215,23 @@ function renderBarChartRace() {
 
     gridLines.exit().remove();
 
-    // Update axes
-    const xAxis = d3.axisTop(xScale).tickFormat(d => {
-        if (raceMetric === 'deaths') {
-            return d >= 1000 ? `${(d / 1000).toFixed(0)}k` : d.toString();
-        }
-        return d.toFixed(1);
-    });
-    const yAxis = d3.axisLeft(yScale);
+    // Update axes - reduce tick count for cleaner x-axis
+    const xAxis = d3.axisTop(xScale)
+        .ticks(4) // Reduce to 4 ticks for less clutter
+        .tickFormat(d => {
+            if (raceMetric === 'deaths') {
+                if (d >= 1000000) {
+                    return `${(d / 1000000).toFixed(1)}M`;
+                } else if (d >= 1000) {
+                    return `${(d / 1000).toFixed(0)}k`;
+                }
+                return d.toString();
+            }
+            return d.toFixed(1);
+        });
+    const yAxis = d3.axisLeft(yScale)
+        .tickSize(0) // Remove tick lines
+        .tickPadding(8); // Add padding between labels and axis
 
     xAxisG.transition()
         .duration(600)
@@ -271,20 +283,42 @@ function renderBarChartRace() {
         .attr('fill', d => colorScale(d.value))
         .attr('opacity', 1);
 
-    // State labels - smooth position transitions
+    // State labels - smooth position transitions with better visibility
     const labels = svg.selectAll('.state-label')
         .data(sortedData, d => d.state);
+
+    // Add text background for better readability
+    const labelBackgrounds = svg.selectAll('.state-label-bg')
+        .data(sortedData, d => d.state);
+
+    labelBackgrounds.enter()
+        .append('rect')
+        .attr('class', 'state-label-bg')
+        .attr('x', margin.left - 200)
+        .attr('y', d => yScale(d.state))
+        .attr('width', 190)
+        .attr('height', yScale.bandwidth())
+        .attr('fill', 'white')
+        .attr('opacity', 0.9)
+        .merge(labelBackgrounds)
+        .transition()
+        .duration(800)
+        .ease(d3.easeCubicOut)
+        .attr('y', d => yScale(d.state))
+        .attr('height', yScale.bandwidth());
+
+    labelBackgrounds.exit().remove();
 
     labels.enter()
         .append('text')
         .attr('class', 'state-label')
-        .attr('x', margin.left - 15)
+        .attr('x', margin.left - 20)
         .attr('y', d => yScale(d.state) + yScale.bandwidth() / 2)
         .attr('dy', '0.35em')
         .attr('text-anchor', 'end')
-        .attr('font-size', '14px')
-        .attr('font-weight', '500')
-        .attr('fill', '#2c3e50')
+        .attr('font-size', '16px')
+        .attr('font-weight', '600')
+        .attr('fill', '#1a1a1a')
         .attr('opacity', 0)
         .merge(labels)
         .transition()
@@ -335,20 +369,20 @@ function renderBarChartRace() {
         .attr('opacity', 0)
         .remove();
 
-    // Rank labels (optional - show rank number)
+    // Rank labels - make them clearer
     const rankLabels = svg.selectAll('.rank-label')
         .data(sortedData, d => d.state);
 
     rankLabels.enter()
         .append('text')
         .attr('class', 'rank-label')
-        .attr('x', margin.left - 30)
+        .attr('x', margin.left - 25)
         .attr('y', d => yScale(d.state) + yScale.bandwidth() / 2)
         .attr('dy', '0.35em')
         .attr('text-anchor', 'end')
-        .attr('font-size', '12px')
+        .attr('font-size', '14px')
         .attr('font-weight', '700')
-        .attr('fill', '#7f8c8d')
+        .attr('fill', '#555555')
         .attr('opacity', 0)
         .merge(rankLabels)
         .transition()

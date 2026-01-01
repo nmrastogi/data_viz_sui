@@ -56,13 +56,36 @@
         
         #bar-race-chart {
             width: 100%;
-            min-height: 600px;
+            min-height: 900px;
         }
         
         #bar-race-svg {
             width: 100%;
             height: 100%;
             display: block;
+        }
+        
+        .axis text {
+            font-size: 11px;
+        }
+        
+        .axis .tick {
+            opacity: 0.8;
+        }
+        
+        .axis .domain {
+            stroke-width: 1.5;
+        }
+        
+        /* Y-axis specific styling for less clutter */
+        .y-axis-group .tick line {
+            display: none; /* Hide tick lines */
+        }
+        
+        .y-axis-group .tick text {
+            font-size: 13px;
+            font-weight: 500;
+            fill: #333;
         }
         
         #race-year-indicator {
