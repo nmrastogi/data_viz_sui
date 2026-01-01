@@ -113,6 +113,15 @@ function setupControls() {
         d3.selectAll('.toggle-btn').classed('active', false);
         d3.select(this).classed('active', true);
         selectedMetric = d3.select(this).attr('data-metric');
+        
+        // Show/hide age-adjusted rate explanation
+        const rateInfo = d3.select('#rate-info');
+        if (selectedMetric === 'rate') {
+            rateInfo.style('display', 'block');
+        } else {
+            rateInfo.style('display', 'none');
+        }
+        
         updateAllVisualizations();
     });
 
@@ -168,13 +177,9 @@ function updateColorScale() {
     const min = d3.min(values);
     const max = d3.max(values);
 
-    if (selectedMetric === 'deaths') {
-        colorScale = d3.scaleSequential(d3.interpolateYlOrRd)
-            .domain([max, min]);
-    } else {
-        colorScale = d3.scaleSequential(d3.interpolateYlOrRd)
-            .domain([max, min]);
-    }
+    // Reverse domain so higher values = redder (darker), lower values = yellower (lighter)
+    colorScale = d3.scaleSequential(d3.interpolateYlOrRd)
+        .domain([min, max]);
 }
 
 // Render choropleth map
