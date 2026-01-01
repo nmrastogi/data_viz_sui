@@ -144,7 +144,10 @@ function renderBarChartRace() {
     // Show top 25 states to reduce clutter
     const maxStatesToShow = 25;
     const height = maxStatesToShow * 35 + 100;
-    const margin = { top: 40, right: 200, bottom: 40, left: 180 };
+    // Define label area and bar start position clearly
+    const labelAreaWidth = 200; // Space reserved for labels on the left
+    const barStartX = labelAreaWidth + 20; // Bars start after labels with 20px gap
+    const margin = { top: 40, right: 200, bottom: 40, left: barStartX };
 
     const svg = d3.select('#bar-race-svg')
         .attr('width', width)
@@ -240,7 +243,6 @@ function renderBarChartRace() {
         .call(xAxis);
 
     // Hide y-axis completely since we use custom labels
-    // Remove the axis line by hiding the domain
     yAxisG.transition()
         .duration(600)
         .ease(d3.easeCubicOut)
@@ -248,7 +250,7 @@ function renderBarChartRace() {
         .call(yAxis);
     
     // Remove the y-axis line (domain) to prevent intersection with bars
-    yAxisG.select('.domain').remove();
+    yAxisG.selectAll('.domain').remove();
 
     // Bars with smooth position and width transitions
     const bars = svg.selectAll('.race-bar')
@@ -299,9 +301,9 @@ function renderBarChartRace() {
     labelBackgrounds.enter()
         .append('rect')
         .attr('class', 'state-label-bg')
-        .attr('x', margin.left - 200)
+        .attr('x', 10) // Start from left edge
         .attr('y', d => yScale(d.state))
-        .attr('width', 190)
+        .attr('width', labelAreaWidth) // Width to cover label area
         .attr('height', yScale.bandwidth())
         .attr('fill', 'white')
         .attr('opacity', 0.9)
@@ -310,6 +312,7 @@ function renderBarChartRace() {
         .duration(800)
         .ease(d3.easeCubicOut)
         .attr('y', d => yScale(d.state))
+        .attr('width', labelAreaWidth)
         .attr('height', yScale.bandwidth());
 
     labelBackgrounds.exit().remove();
@@ -317,10 +320,10 @@ function renderBarChartRace() {
     labels.enter()
         .append('text')
         .attr('class', 'state-label')
-        .attr('x', margin.left - 10)
+        .attr('x', labelAreaWidth - 10) // Position at end of label area
         .attr('y', d => yScale(d.state) + yScale.bandwidth() / 2)
         .attr('dy', '0.35em')
-        .attr('text-anchor', 'start')
+        .attr('text-anchor', 'end')
         .attr('font-size', '16px')
         .attr('font-weight', '600')
         .attr('fill', '#1a1a1a')
@@ -329,6 +332,7 @@ function renderBarChartRace() {
         .transition()
         .duration(800)
         .ease(d3.easeCubicOut)
+        .attr('x', labelAreaWidth - 10) // Right-aligned at end of label area
         .attr('y', d => yScale(d.state) + yScale.bandwidth() / 2)
         .attr('opacity', 1)
         .text(d => d.state);
@@ -374,34 +378,7 @@ function renderBarChartRace() {
         .attr('opacity', 0)
         .remove();
 
-    // Rank labels - positioned right before state name
-    const rankLabels = svg.selectAll('.rank-label')
-        .data(sortedData, d => d.state);
-
-    rankLabels.enter()
-        .append('text')
-        .attr('class', 'rank-label')
-        .attr('x', margin.left - 30)
-        .attr('y', d => yScale(d.state) + yScale.bandwidth() / 2)
-        .attr('dy', '0.35em')
-        .attr('text-anchor', 'end')
-        .attr('font-size', '14px')
-        .attr('font-weight', '700')
-        .attr('fill', '#555555')
-        .attr('opacity', 0)
-        .merge(rankLabels)
-        .transition()
-        .duration(800)
-        .ease(d3.easeCubicOut)
-        .attr('y', d => yScale(d.state) + yScale.bandwidth() / 2)
-        .attr('opacity', 1)
-        .text((d, i) => `#${i + 1}`);
-
-    rankLabels.exit()
-        .transition()
-        .duration(400)
-        .attr('opacity', 0)
-        .remove();
+    // Rank labels removed - no longer showing rank numbers
 
     // Hover interactions
     svg.selectAll('.race-bar')

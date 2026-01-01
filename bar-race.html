@@ -88,11 +88,16 @@
             fill: #333;
         }
         
+        /* Hide y-axis line completely */
+        .y-axis-group .domain {
+            display: none;
+        }
+        
         #race-year-indicator {
             text-align: center;
-            margin-top: 2rem;
-            padding-top: 1.5rem;
-            border-top: 2px solid var(--border-color);
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border-color);
         }
         
         #current-year-display {
@@ -141,13 +146,13 @@
         </div>
         
         <div id="bar-race-container">
-            <div id="bar-race-chart">
-                <svg id="bar-race-svg"></svg>
-            </div>
             <div id="race-year-indicator">
                 <div id="current-year-display">2014</div>
                 <div id="year-progress"></div>
                 <div id="total-value-display"></div>
+            </div>
+            <div id="bar-race-chart">
+                <svg id="bar-race-svg"></svg>
             </div>
         </div>
     </div>
