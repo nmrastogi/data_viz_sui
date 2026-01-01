@@ -231,7 +231,7 @@ function renderBarChartRace() {
         });
     const yAxis = d3.axisLeft(yScale)
         .tickSize(0) // Remove tick lines
-        .tickPadding(8); // Add padding between labels and axis
+        .tickFormat(''); // Hide axis labels - we use custom labels instead
 
     xAxisG.transition()
         .duration(600)
@@ -239,11 +239,16 @@ function renderBarChartRace() {
         .attr('transform', `translate(0, ${margin.top})`)
         .call(xAxis);
 
+    // Hide y-axis completely since we use custom labels
+    // Remove the axis line by hiding the domain
     yAxisG.transition()
         .duration(600)
         .ease(d3.easeCubicOut)
         .attr('transform', `translate(${margin.left}, 0)`)
         .call(yAxis);
+    
+    // Remove the y-axis line (domain) to prevent intersection with bars
+    yAxisG.select('.domain').remove();
 
     // Bars with smooth position and width transitions
     const bars = svg.selectAll('.race-bar')
@@ -312,10 +317,10 @@ function renderBarChartRace() {
     labels.enter()
         .append('text')
         .attr('class', 'state-label')
-        .attr('x', margin.left - 20)
+        .attr('x', margin.left - 10)
         .attr('y', d => yScale(d.state) + yScale.bandwidth() / 2)
         .attr('dy', '0.35em')
-        .attr('text-anchor', 'end')
+        .attr('text-anchor', 'start')
         .attr('font-size', '16px')
         .attr('font-weight', '600')
         .attr('fill', '#1a1a1a')
@@ -369,14 +374,14 @@ function renderBarChartRace() {
         .attr('opacity', 0)
         .remove();
 
-    // Rank labels - make them clearer
+    // Rank labels - positioned right before state name
     const rankLabels = svg.selectAll('.rank-label')
         .data(sortedData, d => d.state);
 
     rankLabels.enter()
         .append('text')
         .attr('class', 'rank-label')
-        .attr('x', margin.left - 25)
+        .attr('x', margin.left - 30)
         .attr('y', d => yScale(d.state) + yScale.bandwidth() / 2)
         .attr('dy', '0.35em')
         .attr('text-anchor', 'end')
