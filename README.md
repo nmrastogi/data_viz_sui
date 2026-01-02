@@ -77,3 +77,4 @@ Simply upload all files (index.html, styles.css, script.js, data-table.csv) to y
 - The visualization is fully responsive and works on mobile devices
 
 
+
