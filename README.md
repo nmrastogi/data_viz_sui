@@ -76,3 +76,4 @@ Simply upload all files (index.html, styles.css, script.js, data-table.csv) to y
 - All data is loaded from the local CSV file
 - The visualization is fully responsive and works on mobile devices
 
+
