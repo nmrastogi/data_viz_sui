@@ -6,6 +6,7 @@ let currentRaceYear = 2014;
 let isRacePlaying = true;
 let raceAnimationInterval = null;
 let raceSpeed = 800; // milliseconds per year
+let selectedRaceStates = new Set(); // Selected states for filtering
 
 // Initialize the bar chart race
 async function init() {
@@ -92,6 +93,55 @@ function setupBarChartRace() {
 
     // Update button state
     updatePlayPauseButton();
+    
+    // State filter setup
+    setupRaceStateFilter();
+}
+
+// Setup state filter for bar chart race
+function setupRaceStateFilter() {
+    if (!processedData.allStates || processedData.allStates.length === 0) {
+        return; // Data not loaded yet
+    }
+    
+    const stateSelect = d3.select('#race-state-filter');
+    
+    // Clear existing options
+    stateSelect.selectAll('option').remove();
+    
+    // Populate dropdown with all states
+    processedData.allStates.forEach(state => {
+        stateSelect.append('option')
+            .attr('value', state)
+            .text(state)
+            .property('selected', true);
+    });
+    
+    // Initialize with all states selected
+    selectedRaceStates = new Set(processedData.allStates);
+    
+    // Handle state selection changes
+    stateSelect.on('change', function() {
+        selectedRaceStates = new Set(Array.from(this.selectedOptions).map(opt => opt.value));
+        renderBarChartRace();
+    });
+    
+    // Select all button
+    d3.select('#race-select-all-states').on('click', function() {
+        processedData.allStates.forEach(state => {
+            const option = stateSelect.select(`option[value="${state}"]`);
+            option.property('selected', true);
+        });
+        selectedRaceStates = new Set(processedData.allStates);
+        renderBarChartRace();
+    });
+    
+    // Clear all button
+    d3.select('#race-clear-all-states').on('click', function() {
+        stateSelect.selectAll('option').property('selected', false);
+        selectedRaceStates = new Set();
+        renderBarChartRace();
+    });
 }
 
 // Start the automatic animation
@@ -141,23 +191,21 @@ function renderBarChartRace() {
     if (!containerNode) return;
     
     const width = containerNode.getBoundingClientRect().width;
-    // Show all states
-    const totalStates = processedData.allStates ? processedData.allStates.length : 51;
-    const height = totalStates * 35 + 100;
     // Define label area and bar start position clearly
     const labelAreaWidth = 200; // Space reserved for labels on the left
     const barStartX = labelAreaWidth + 20; // Bars start after labels with 20px gap
     const margin = { top: 40, right: 200, bottom: 40, left: barStartX };
 
-    const svg = d3.select('#bar-race-svg')
-        .attr('width', width)
-        .attr('height', height);
-
     // Get data for current year
     const yearData = processedData.byYear[currentRaceYear] || [];
     
-    // Sort by selected metric (descending) - show all states
-    const sortedData = yearData
+    // Filter by selected states, then sort by selected metric (descending)
+    let filteredData = yearData;
+    if (selectedRaceStates.size > 0) {
+        filteredData = yearData.filter(d => selectedRaceStates.has(d.state));
+    }
+    
+    const sortedData = filteredData
         .map(d => ({
             state: d.state,
             deaths: d.deaths,
@@ -165,6 +213,14 @@ function renderBarChartRace() {
             value: raceMetric === 'deaths' ? d.deaths : d.rate
         }))
         .sort((a, b) => b.value - a.value);
+    
+    // Calculate height based on filtered states
+    const numStatesToShow = sortedData.length || 1;
+    const height = Math.max(400, numStatesToShow * 35 + 100);
+
+    const svg = d3.select('#bar-race-svg')
+        .attr('width', width)
+        .attr('height', height);
 
     if (sortedData.length === 0) return;
 
