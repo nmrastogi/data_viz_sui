@@ -167,6 +167,11 @@ function setupControls() {
     d3.select('#open-race-btn').on('click', function() {
         window.open('bar-race.html', '_blank');
     });
+
+    // Open animated map in new page
+    d3.select('#open-animated-map-btn').on('click', function() {
+        window.open('animated-map.html', '_blank');
+    });
 }
 
 // Update all visualizations

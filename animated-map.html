@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Animated Map - Suicide Statistics</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/topojson@3"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--background);
+            overflow-x: hidden;
+        }
+        
+        .map-page-container {
+            width: 100vw;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 2rem;
+        }
+        
+        .map-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .map-header h1 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .map-controls-panel {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--surface);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+        
+        #animated-map-container {
+            background: var(--surface);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            flex: 1;
+            position: relative;
+            min-height: 600px;
+        }
+        
+        #animated-map-svg {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+        
+        #animated-map-loading {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 10;
+        }
+        
+        #animated-year-indicator {
+            position: absolute;
+            top: 50%;
+            right: 2rem;
+            transform: translateY(-50%);
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            z-index: 5;
+        }
+        
+        #animated-year-display {
+            font-size: 4rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            line-height: 1;
+        }
+        
+        #animated-year-progress {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 0.5rem;
+        }
+        
+        #animated-total-display {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: var(--accent-color);
+        }
+        
+        #animated-map-legend {
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem;
+            border-radius: 6px;
+            box-shadow: var(--shadow);
+            font-size: 0.85rem;
+            z-index: 5;
+        }
+        
+        .legend-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+        
+        .legend-scale {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .legend-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.3rem;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="map-page-container">
+        <div class="map-header">
+            <h1>Animated Map</h1>
+            <p style="color: var(--text-secondary);">US Suicide Statistics by State (2014-2023)</p>
+        </div>
+        
+        <div class="map-controls-panel">
+            <div class="toggle-buttons" id="animated-metric-toggle">
+                <button class="toggle-btn active" data-metric="deaths">Total Deaths</button>
+                <button class="toggle-btn" data-metric="rate">Age Adjusted Rate</button>
+            </div>
+            <div class="race-controls">
+                <button id="animated-play-pause-btn" class="toggle-btn" style="min-width: 100px; padding: 0.75rem 1.5rem;">
+                    <span id="animated-play-pause-text">Pause</span>
+                </button>
+                <label style="font-size: 0.9rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem;">
+                    Speed: 
+                    <input type="range" id="animated-speed-slider" min="500" max="3000" value="1500" step="100" style="width: 120px;">
+                    <span id="animated-speed-display">1500ms</span>
+                </label>
+            </div>
+        </div>
+        
+        <div id="animated-map-container">
+            <div id="animated-map-loading" class="loading">Loading map data...</div>
+            <svg id="animated-map-svg"></svg>
+            <div id="animated-year-indicator">
+                <div id="animated-year-display">2014</div>
+                <div id="animated-year-progress"></div>
+                <div id="animated-total-display"></div>
+            </div>
+            <div id="animated-map-legend"></div>
+        </div>
+    </div>
+
+    <div id="tooltip" class="tooltip"></div>
+
+    <script src="animated-map.js"></script>
+</body>
+</html>
+
