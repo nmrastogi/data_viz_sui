@@ -270,6 +270,35 @@ function renderMap() {
             }
         });
 
+    // Add state labels
+    svg.append('g')
+        .selectAll('text')
+        .data(featuresWithData)
+        .enter()
+        .append('text')
+        .attr('class', 'state-label')
+        .attr('x', d => {
+            const centroid = path.centroid(d.feature);
+            return centroid[0];
+        })
+        .attr('y', d => {
+            const centroid = path.centroid(d.feature);
+            return centroid[1];
+        })
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'middle')
+        .attr('font-size', '11px')
+        .attr('font-weight', '600')
+        .attr('fill', '#333')
+        .attr('stroke', 'white')
+        .attr('stroke-width', '0.3px')
+        .attr('stroke-opacity', '0.8')
+        .attr('pointer-events', 'none')
+        .text(d => {
+            const stateAbbr = stateNameMap[d.stateName] || d.stateName.substring(0, 2).toUpperCase();
+            return stateAbbr;
+        });
+
     // Render legend
     renderMapLegend();
 }

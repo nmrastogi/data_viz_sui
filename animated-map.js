@@ -9,6 +9,23 @@ let animatedInterval = null;
 let animatedSpeed = 1500; // milliseconds per year
 let colorScale = null;
 
+// State name mapping for TopoJSON
+const stateNameMap = {
+    'Alabama': 'AL', 'Alaska': 'AK', 'Arizona': 'AZ', 'Arkansas': 'AR',
+    'California': 'CA', 'Colorado': 'CO', 'Connecticut': 'CT', 'Delaware': 'DE',
+    'District of Columbia': 'DC', 'Florida': 'FL', 'Georgia': 'GA', 'Hawaii': 'HI',
+    'Idaho': 'ID', 'Illinois': 'IL', 'Indiana': 'IN', 'Iowa': 'IA',
+    'Kansas': 'KS', 'Kentucky': 'KY', 'Louisiana': 'LA', 'Maine': 'ME',
+    'Maryland': 'MD', 'Massachusetts': 'MA', 'Michigan': 'MI', 'Minnesota': 'MN',
+    'Mississippi': 'MS', 'Missouri': 'MO', 'Montana': 'MT', 'Nebraska': 'NE',
+    'Nevada': 'NV', 'New Hampshire': 'NH', 'New Jersey': 'NJ', 'New Mexico': 'NM',
+    'New York': 'NY', 'North Carolina': 'NC', 'North Dakota': 'ND', 'Ohio': 'OH',
+    'Oklahoma': 'OK', 'Oregon': 'OR', 'Pennsylvania': 'PA', 'Rhode Island': 'RI',
+    'South Carolina': 'SC', 'South Dakota': 'SD', 'Tennessee': 'TN', 'Texas': 'TX',
+    'Utah': 'UT', 'Vermont': 'VT', 'Virginia': 'VA', 'Washington': 'WA',
+    'West Virginia': 'WV', 'Wisconsin': 'WI', 'Wyoming': 'WY'
+};
+
 // Initialize the animated map
 async function init() {
     await loadData();
@@ -252,6 +269,41 @@ function renderAnimatedMap() {
         });
 
     paths.exit().remove();
+
+    // Update or create state labels
+    const labels = svg.selectAll('.state-label')
+        .data(featuresWithData, d => d.stateName);
+
+    // Enter: new labels
+    const labelsEnter = labels.enter()
+        .append('text')
+        .attr('class', 'state-label')
+        .attr('text-anchor', 'middle')
+        .attr('dominant-baseline', 'middle')
+        .attr('font-size', '11px')
+        .attr('font-weight', '600')
+        .attr('fill', '#333')
+        .attr('stroke', 'white')
+        .attr('stroke-width', '0.3px')
+        .attr('stroke-opacity', '0.8')
+        .attr('pointer-events', 'none')
+        .text(d => {
+            const stateAbbr = stateNameMap[d.stateName] || d.stateName.substring(0, 2).toUpperCase();
+            return stateAbbr;
+        });
+
+    // Update: position labels
+    labelsEnter.merge(labels)
+        .attr('x', d => {
+            const centroid = path.centroid(d.feature);
+            return centroid[0];
+        })
+        .attr('y', d => {
+            const centroid = path.centroid(d.feature);
+            return centroid[1];
+        });
+
+    labels.exit().remove();
 
     // Update legend
     renderAnimatedLegend();
