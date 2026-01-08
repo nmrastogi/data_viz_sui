@@ -270,40 +270,46 @@ function renderAnimatedMap() {
 
     paths.exit().remove();
 
-    // Update or create state labels
-    const labels = svg.selectAll('.state-label')
+    // Update or create state labels with backgrounds
+    const labelGroups = svg.selectAll('.state-label-group')
         .data(featuresWithData, d => d.stateName);
 
-    // Enter: new labels
-    const labelsEnter = labels.enter()
-        .append('text')
+    // Enter: new label groups
+    const labelGroupsEnter = labelGroups.enter()
+        .append('g')
+        .attr('class', 'state-label-group')
+        .attr('pointer-events', 'none');
+
+    // Add background circle
+    labelGroupsEnter.append('circle')
+        .attr('class', 'state-label-bg')
+        .attr('r', 12)
+        .attr('fill', 'white')
+        .attr('fill-opacity', 0.85)
+        .attr('stroke', 'rgba(0, 0, 0, 0.2)')
+        .attr('stroke-width', '0.5px');
+
+    // Add text
+    labelGroupsEnter.append('text')
         .attr('class', 'state-label')
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'middle')
-        .attr('font-size', '11px')
-        .attr('font-weight', '600')
-        .attr('fill', '#333')
-        .attr('stroke', 'white')
-        .attr('stroke-width', '0.3px')
-        .attr('stroke-opacity', '0.8')
-        .attr('pointer-events', 'none')
+        .attr('font-size', '12px')
+        .attr('font-weight', 'bold')
+        .attr('fill', '#1a1a1a')
         .text(d => {
             const stateAbbr = stateNameMap[d.stateName] || d.stateName.substring(0, 2).toUpperCase();
             return stateAbbr;
         });
 
-    // Update: position labels
-    labelsEnter.merge(labels)
-        .attr('x', d => {
+    // Update: position label groups
+    labelGroupsEnter.merge(labelGroups)
+        .attr('transform', d => {
             const centroid = path.centroid(d.feature);
-            return centroid[0];
-        })
-        .attr('y', d => {
-            const centroid = path.centroid(d.feature);
-            return centroid[1];
+            return `translate(${centroid[0]}, ${centroid[1]})`;
         });
 
-    labels.exit().remove();
+    labelGroups.exit().remove();
 
     // Update legend
     renderAnimatedLegend();

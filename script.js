@@ -270,30 +270,36 @@ function renderMap() {
             }
         });
 
-    // Add state labels
-    svg.append('g')
-        .selectAll('text')
+    // Add state labels with backgrounds
+    const labelGroups = svg.append('g')
+        .selectAll('.state-label-group')
         .data(featuresWithData)
         .enter()
-        .append('text')
+        .append('g')
+        .attr('class', 'state-label-group')
+        .attr('pointer-events', 'none')
+        .attr('transform', d => {
+            const centroid = path.centroid(d.feature);
+            return `translate(${centroid[0]}, ${centroid[1]})`;
+        });
+
+    // Add background circle
+    labelGroups.append('circle')
+        .attr('class', 'state-label-bg')
+        .attr('r', 12)
+        .attr('fill', 'white')
+        .attr('fill-opacity', 0.85)
+        .attr('stroke', 'rgba(0, 0, 0, 0.2)')
+        .attr('stroke-width', '0.5px');
+
+    // Add text
+    labelGroups.append('text')
         .attr('class', 'state-label')
-        .attr('x', d => {
-            const centroid = path.centroid(d.feature);
-            return centroid[0];
-        })
-        .attr('y', d => {
-            const centroid = path.centroid(d.feature);
-            return centroid[1];
-        })
         .attr('text-anchor', 'middle')
         .attr('dominant-baseline', 'middle')
-        .attr('font-size', '11px')
-        .attr('font-weight', '600')
-        .attr('fill', '#333')
-        .attr('stroke', 'white')
-        .attr('stroke-width', '0.3px')
-        .attr('stroke-opacity', '0.8')
-        .attr('pointer-events', 'none')
+        .attr('font-size', '12px')
+        .attr('font-weight', 'bold')
+        .attr('fill', '#1a1a1a')
         .text(d => {
             const stateAbbr = stateNameMap[d.stateName] || d.stateName.substring(0, 2).toUpperCase();
             return stateAbbr;
