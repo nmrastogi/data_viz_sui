@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heatmap - Suicide Statistics</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--background);
+            overflow-x: hidden;
+        }
+        
+        .heatmap-page-container {
+            width: 100vw;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 2rem;
+        }
+        
+        .heatmap-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .heatmap-header h1 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .heatmap-controls-panel {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+            padding: 1.5rem;
+            background: var(--surface);
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+        }
+        
+        #heatmap-container {
+            background: var(--surface);
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: var(--shadow);
+            flex: 1;
+            position: relative;
+            min-height: 600px;
+            overflow-x: auto;
+        }
+        
+        #heatmap-svg {
+            display: block;
+        }
+        
+        .heatmap-cell {
+            cursor: pointer;
+            stroke: white;
+            stroke-width: 1;
+        }
+        
+        .heatmap-cell:hover {
+            stroke-width: 2;
+            stroke: #333;
+        }
+        
+        .heatmap-label {
+            font-size: 11px;
+            fill: #333;
+        }
+        
+        .heatmap-axis {
+            font-size: 11px;
+        }
+    </style>
+</head>
+<body>
+    <div class="heatmap-page-container">
+        <div class="heatmap-header">
+            <h1>Heatmap Analysis</h1>
+            <p style="color: var(--text-secondary);">State × Year Overview (2014-2023)</p>
+        </div>
+        
+        <div class="heatmap-controls-panel">
+            <div class="toggle-buttons" id="heatmap-metric-toggle">
+                <button class="toggle-btn active" data-metric="deaths">Total Deaths</button>
+                <button class="toggle-btn" data-metric="rate">Age Adjusted Rate</button>
+            </div>
+            <div style="display: flex; align-items: center; gap: 1rem;">
+                <label style="font-size: 0.9rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem;">
+                    <input type="checkbox" id="sort-states" checked> Sort States by Value
+                </label>
+            </div>
+        </div>
+        
+        <div id="heatmap-container">
+            <svg id="heatmap-svg"></svg>
+        </div>
+    </div>
+
+    <div id="tooltip" class="tooltip"></div>
+
+    <script src="heatmap.js"></script>
+</body>
+</html>
