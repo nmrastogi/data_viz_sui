@@ -127,11 +127,18 @@ function setupScrollListener() {
 function updateYearFromScroll() {
     const scrollPosition = window.scrollY;
     const windowHeight = window.innerHeight;
+    const initialSpacerHeight = windowHeight; // Height of initial spacer
     const documentHeight = document.documentElement.scrollHeight;
-    const scrollableHeight = documentHeight - windowHeight;
+    
+    // Calculate scroll percentage starting from after the initial spacer
+    // Subtract the initial spacer height from scroll position
+    const adjustedScrollPosition = Math.max(0, scrollPosition - initialSpacerHeight);
+    const scrollableHeight = documentHeight - windowHeight - initialSpacerHeight;
     
     // Calculate scroll percentage (0 to 1)
-    const scrollPercent = Math.min(Math.max(scrollPosition / scrollableHeight, 0), 1);
+    const scrollPercent = scrollableHeight > 0 
+        ? Math.min(Math.max(adjustedScrollPosition / scrollableHeight, 0), 1)
+        : 0;
     
     // Map scroll percentage to year range (2014 to 2023)
     const yearRange = processedData.allYears[processedData.allYears.length - 1] - processedData.allYears[0];

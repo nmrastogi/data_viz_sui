@@ -21,6 +21,13 @@
             min-height: 300vh; /* Make page scrollable */
         }
         
+        .initial-spacer {
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
         .sticky-map-section {
             position: sticky;
             top: 0;
@@ -32,6 +39,7 @@
             align-items: center;
             background: var(--background);
             z-index: 10;
+            padding: 2rem 0;
         }
         
         .scroll-map-header {
@@ -150,11 +158,32 @@
             right: 2rem;
             z-index: 15;
         }
+        
+        .home-button {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            z-index: 15;
+        }
+        
+        .home-button .toggle-btn {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+        }
     </style>
 </head>
 <body>
     <div class="scroll-map-container">
+        <!-- Initial spacer to center map before scroll -->
+        <div class="initial-spacer"></div>
+        
         <div class="sticky-map-section">
+            <div class="home-button">
+                <button id="home-btn" class="toggle-btn" onclick="window.location.href='index.html'">
+                    ← Home
+                </button>
+            </div>
+            
             <div class="metric-toggle-container">
                 <div class="toggle-buttons" id="scroll-metric-toggle">
                     <button class="toggle-btn active" data-metric="deaths">Total Deaths</button>
