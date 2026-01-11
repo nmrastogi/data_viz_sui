@@ -173,6 +173,11 @@ function setupControls() {
         window.open('animated-map.html', '_blank');
     });
 
+    // Open scroll map in new page
+    d3.select('#open-scroll-map-btn').on('click', function() {
+        window.open('scroll-map.html', '_blank');
+    });
+
     // Open line graph race in new page
     d3.select('#open-line-race-btn').on('click', function() {
         window.open('line-race.html', '_blank');

@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scroll Map - Suicide Statistics</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/topojson@3"></script>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: var(--background);
+            overflow-x: hidden;
+        }
+        
+        .scroll-map-container {
+            position: relative;
+            width: 100vw;
+            min-height: 300vh; /* Make page scrollable */
+        }
+        
+        .sticky-map-section {
+            position: sticky;
+            top: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: var(--background);
+            z-index: 10;
+        }
+        
+        .scroll-map-header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 2rem;
+        }
+        
+        .scroll-map-header h1 {
+            font-size: 3rem;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .year-display {
+            font-size: 5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 1rem 0;
+            text-align: center;
+        }
+        
+        .year-progress {
+            font-size: 1.5rem;
+            color: var(--text-secondary);
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        #scroll-map-svg {
+            width: 90%;
+            max-width: 1200px;
+            height: auto;
+            display: block;
+        }
+        
+        .scroll-map-legend {
+            position: absolute;
+            bottom: 2rem;
+            right: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem;
+            border-radius: 6px;
+            box-shadow: var(--shadow);
+            font-size: 0.85rem;
+            z-index: 5;
+        }
+        
+        .legend-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            color: var(--primary-color);
+        }
+        
+        .legend-scale {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .legend-labels {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 0.3rem;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+        }
+        
+        .scroll-instructions {
+            position: absolute;
+            bottom: 2rem;
+            left: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1rem;
+            border-radius: 6px;
+            box-shadow: var(--shadow);
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+            z-index: 5;
+        }
+        
+        .content-sections {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .year-section {
+            min-height: 100vh;
+            padding: 4rem 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: var(--surface);
+            margin: 2rem 0;
+            border-radius: 8px;
+        }
+        
+        .year-section h2 {
+            font-size: 2.5rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+        
+        .year-section p {
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            max-width: 800px;
+            text-align: center;
+            line-height: 1.6;
+        }
+        
+        .metric-toggle-container {
+            position: absolute;
+            top: 2rem;
+            right: 2rem;
+            z-index: 15;
+        }
+    </style>
+</head>
+<body>
+    <div class="scroll-map-container">
+        <div class="sticky-map-section">
+            <div class="metric-toggle-container">
+                <div class="toggle-buttons" id="scroll-metric-toggle">
+                    <button class="toggle-btn active" data-metric="deaths">Total Deaths</button>
+                    <button class="toggle-btn" data-metric="rate">Age Adjusted Rate</button>
+                </div>
+            </div>
+            
+            <div class="scroll-map-header">
+                <h1>Scroll Through Time</h1>
+                <p style="color: var(--text-secondary); font-size: 1.2rem;">Scroll down to see how suicide statistics changed from 2014 to 2023</p>
+            </div>
+            
+            <div class="year-display" id="scroll-year-display">2014</div>
+            <div class="year-progress" id="scroll-year-progress">Year 1 of 10</div>
+            
+            <svg id="scroll-map-svg"></svg>
+            
+            <div class="scroll-map-legend" id="scroll-map-legend"></div>
+            
+            <div class="scroll-instructions">
+                <strong>Scroll down</strong> to progress through years<br>
+                The map updates automatically
+            </div>
+        </div>
+        
+        <div class="content-sections">
+            <!-- Year sections for scroll triggers -->
+            <div class="year-section" data-year="2014">
+                <h2>2014 - The Beginning</h2>
+                <p>This marks the start of our data collection period. Scroll to see how suicide statistics evolved over the next decade.</p>
+            </div>
+            <div class="year-section" data-year="2015">
+                <h2>2015</h2>
+                <p>Observing early trends and patterns in the data.</p>
+            </div>
+            <div class="year-section" data-year="2016">
+                <h2>2016</h2>
+                <p>Continuing to track changes across all states.</p>
+            </div>
+            <div class="year-section" data-year="2017">
+                <h2>2017</h2>
+                <p>Mid-decade analysis reveals important patterns.</p>
+            </div>
+            <div class="year-section" data-year="2018">
+                <h2>2018</h2>
+                <p>Tracking ongoing trends and variations.</p>
+            </div>
+            <div class="year-section" data-year="2019">
+                <h2>2019</h2>
+                <p>Pre-pandemic baseline data collection.</p>
+            </div>
+            <div class="year-section" data-year="2020">
+                <h2>2020</h2>
+                <p>A significant year with global changes affecting many aspects of life.</p>
+            </div>
+            <div class="year-section" data-year="2021">
+                <h2>2021</h2>
+                <p>Continuing to monitor post-2020 trends.</p>
+            </div>
+            <div class="year-section" data-year="2022">
+                <h2>2022</h2>
+                <p>Recent data showing current patterns.</p>
+            </div>
+            <div class="year-section" data-year="2023">
+                <h2>2023 - The Latest Data</h2>
+                <p>The most recent year in our dataset, showing the current state of suicide statistics across the United States.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="tooltip" class="tooltip"></div>
+
+    <script src="scroll-map.js"></script>
+</body>
+</html>
