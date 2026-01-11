@@ -177,21 +177,6 @@ function setupControls() {
     d3.select('#open-line-race-btn').on('click', function() {
         window.open('line-race.html', '_blank');
     });
-
-    // Open scatter plot in new page
-    d3.select('#open-scatter-btn').on('click', function() {
-        window.open('scatter-plot.html', '_blank');
-    });
-
-    // Open heatmap in new page
-    d3.select('#open-heatmap-btn').on('click', function() {
-        window.open('heatmap.html', '_blank');
-    });
-
-    // Open percentage change in new page
-    d3.select('#open-percentage-change-btn').on('click', function() {
-        window.open('percentage-change.html', '_blank');
-    });
 }
 
 // Update all visualizations
