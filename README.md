@@ -21,8 +21,9 @@ An interactive web visualization showcasing suicide statistics by US state from 
   - **Bar Chart Race**: Animated ranking of states over time with smooth transitions
   - **Line Graph Race**: Select states and watch animated line graphs showing trends from 2014-2023
   - Toggle between views, with independent controls for each visualization
+  - Unified navigation bar design matching the animated map style with compact, centered controls
 
-- **Animated Map** (`animated-map.html`): Watch state colors change over time with automatic year progression. Features a compact year indicator at the top and play/pause controls.
+- **Animated Map** (`animated-map.html`): Watch state colors change over time with automatic year progression. Features a compact year indicator at the top and play/pause controls. The navigation bar design is consistent across all race visualizations.
 
 - **Scroll Map** (`scroll-map.html`): Scroll-based visualization where the map updates automatically as you scroll down the page, progressing through years from 2014 to 2023.
 
@@ -60,7 +61,7 @@ Due to CORS restrictions, you cannot simply open `index.html` directly in a brow
 
 ### Additional Visualizations
 
-- **Race Visualizations**: Click "Open Race Visualizations in New Page" to access the combined bar chart race and line graph race. Toggle between the two views using the buttons at the top. Each visualization has its own controls for play/pause, speed adjustment, metric selection, and state filtering.
+- **Race Visualizations**: Click "Open Race Visualizations in New Page" to access the combined bar chart race and line graph race. Toggle between the two views using the buttons at the top. Each visualization has its own controls for play/pause, speed adjustment, metric selection, and state filtering. The navigation bar features a clean, centered design with minimal padding for optimal use of space.
 
 - **Animated Map**: Click "Open Animated Map" to see an automatically progressing map showing year-by-year changes. The year indicator is displayed at the top center. Use play/pause controls and adjust the speed as needed.
 
@@ -155,6 +156,8 @@ This is a static website that can be deployed to:
 - **Multiple View Types**: Maps, charts, races, scatter plots, heatmaps, and change analysis
 - **Scroll-Based Interaction**: Unique scroll-driven map visualization
 - **Combined Visualizations**: Bar chart race and line graph race available on a single page
+- **Unified UI Design**: Consistent navigation bar styling across race visualizations and animated map
+- **Optimized Layout**: Compact controls with minimal padding for efficient use of screen space
 - **Responsive Design**: Works on desktop, tablet, and mobile devices
 - **No Build Required**: Pure HTML, CSS, and JavaScript - just open and view
 - **Educational Content**: Clear definitions and explanations of metrics
