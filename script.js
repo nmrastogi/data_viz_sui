@@ -178,6 +178,11 @@ function setupControls() {
         window.open('scroll-map.html', '_blank');
     });
 
+    // Open combined race visualizations in new page
+    d3.select('#open-race-combined-btn').on('click', function() {
+        window.open('race-combined.html', '_blank');
+    });
+
     // Open line graph race in new page
     d3.select('#open-line-race-btn').on('click', function() {
         window.open('line-race.html', '_blank');
