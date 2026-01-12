@@ -115,26 +115,51 @@
             margin-bottom: 2rem;
             padding-bottom: 1.5rem;
             border-bottom: 2px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
         }
         
-        #current-year-display {
+        #bar-race-year-indicator,
+        #line-race-year-indicator {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 2px solid var(--border-color);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #current-year-display,
+        #bar-current-year-display,
+        #line-current-year-display {
             font-size: 4rem;
             font-weight: 700;
             color: var(--primary-color);
             margin-bottom: 0.5rem;
             line-height: 1;
+            text-align: center;
         }
         
-        #year-progress {
+        #year-progress,
+        #bar-year-progress,
+        #line-year-progress {
             font-size: 1.2rem;
             color: var(--text-secondary);
             margin-bottom: 0.5rem;
+            text-align: center;
         }
         
-        #total-value-display {
+        #total-value-display,
+        #bar-total-value-display,
+        #line-total-value-display {
             font-size: 1.3rem;
             font-weight: 600;
             color: var(--accent-color);
+            text-align: center;
         }
         
         .axis text {
