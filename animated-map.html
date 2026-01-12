@@ -135,9 +135,27 @@
             font-size: 0.75rem;
             color: var(--text-secondary);
         }
+        
+        .home-button {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            z-index: 15;
+        }
+        
+        .home-button .toggle-btn {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+        }
     </style>
 </head>
 <body>
+    <div class="home-button">
+        <button class="toggle-btn" onclick="window.location.href='index.html'">
+            ← Home
+        </button>
+    </div>
+    
     <div class="map-page-container">
         <div class="map-header">
             <h1>Animated Map</h1>

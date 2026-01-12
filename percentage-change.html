@@ -96,9 +96,27 @@
             stroke: #333;
             stroke-width: 2;
         }
+        
+        .home-button {
+            position: absolute;
+            top: 2rem;
+            left: 2rem;
+            z-index: 15;
+        }
+        
+        .home-button .toggle-btn {
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
+        }
     </style>
 </head>
 <body>
+    <div class="home-button">
+        <button class="toggle-btn" onclick="window.location.href='index.html'">
+            ← Home
+        </button>
+    </div>
+    
     <div class="change-page-container">
         <div class="change-header">
             <h1>Percentage Change Analysis</h1>
