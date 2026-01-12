@@ -33,6 +33,8 @@
             flex-direction: column;
             padding: 2rem;
             padding-top: 5rem;
+            max-width: 100%;
+            box-sizing: border-box;
         }
         
         .race-header {
@@ -54,32 +56,47 @@
         }
         
         .view-toggle .toggle-btn {
-            padding: 0.4rem 0.4rem !important;
+            padding: 0.4rem 0.3rem !important;
+            flex: 0 0 auto !important;
         }
         
         .race-controls-panel {
             display: flex;
-            justify-content: center;
+            justify-content: space-between;
             align-items: center;
             flex-wrap: wrap;
-            gap: 1.5rem;
+            gap: 1rem;
             margin-bottom: 2rem;
-            padding: 1rem 0.25rem !important;
+            padding: 1rem 0.5rem !important;
             background: var(--surface);
             border-radius: 8px;
             box-shadow: var(--shadow);
         }
         
+        .race-controls-panel > *:first-child {
+            margin-left: 0;
+        }
+        
+        .race-controls-panel > *:last-child {
+            margin-right: 0;
+        }
+        
         /* Smaller metric toggle buttons */
         #bar-race-metric-toggle .toggle-btn,
         #line-race-metric-toggle .toggle-btn {
-            padding: 0.35rem 0.6rem !important;
+            padding: 0.3rem 0.5rem !important;
             font-size: 0.75rem !important;
+            flex: 0 0 auto !important;
         }
         
         #bar-race-metric-toggle,
         #line-race-metric-toggle {
             gap: 0.3rem !important;
+            margin: 0 !important;
+        }
+        
+        .race-controls {
+            margin-left: auto;
         }
         
         .visualization-section {
