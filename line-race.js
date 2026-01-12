@@ -1,7 +1,7 @@
 // Global state for line graph race
 let rawData = [];
 let processedData = {};
-let lineRaceMetric = 'deaths';
+let lineRaceMetric = 'rate';
 let currentLineRaceYear = 2014;
 let isLineRacePlaying = true;
 let lineRaceAnimationInterval = null;

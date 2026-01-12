@@ -3,7 +3,7 @@ let rawData = [];
 let processedData = {};
 
 // Bar Chart Race state
-let barRaceMetric = 'deaths';
+let barRaceMetric = 'rate';
 let currentBarRaceYear = 2014;
 let isBarRacePlaying = true;
 let barRaceAnimationInterval = null;
@@ -11,7 +11,7 @@ let barRaceSpeed = 800;
 let selectedBarRaceStates = new Set();
 
 // Line Graph Race state
-let lineRaceMetric = 'deaths';
+let lineRaceMetric = 'rate';
 let currentLineRaceYear = 2014;
 let isLineRacePlaying = true;
 let lineRaceAnimationInterval = null;

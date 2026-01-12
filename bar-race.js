@@ -1,7 +1,7 @@
 // Global state for bar chart race
 let rawData = [];
 let processedData = {};
-let raceMetric = 'deaths';
+let raceMetric = 'rate';
 let currentRaceYear = 2014;
 let isRacePlaying = true;
 let raceAnimationInterval = null;

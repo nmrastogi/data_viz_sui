@@ -1,7 +1,7 @@
 // Global state for percentage change
 let rawData = [];
 let processedData = {};
-let changeMetric = 'deaths';
+let changeMetric = 'rate';
 let sortByChange = true;
 
 // Initialize the percentage change visualization

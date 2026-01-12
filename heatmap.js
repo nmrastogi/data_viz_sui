@@ -1,7 +1,7 @@
 // Global state for heatmap
 let rawData = [];
 let processedData = {};
-let heatmapMetric = 'deaths';
+let heatmapMetric = 'rate';
 let sortStates = true;
 
 // Initialize the heatmap

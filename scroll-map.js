@@ -2,7 +2,7 @@
 let rawData = [];
 let processedData = {};
 let usStates = null;
-let scrollMetric = 'deaths';
+let scrollMetric = 'rate';
 let currentScrollYear = 2014;
 let colorScale = null;
 

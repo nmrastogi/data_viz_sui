@@ -3,11 +3,10 @@ let rawData = [];
 let processedData = {};
 let usStates = null;
 let selectedYear = 2014;
-let selectedMetric = 'deaths';
+let selectedMetric = 'rate';
 let selectedStates = new Set();
 let comparisonMode = false;
 let colorScale = null;
-let scrollMetric = 'deaths';
 let currentScrollStateIndex = 0;
 
 // State name mapping for TopoJSON
