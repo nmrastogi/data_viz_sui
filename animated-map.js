@@ -196,7 +196,7 @@ function renderAnimatedMap() {
 
     const container = d3.select('#animated-map-container');
     const width = container.node().getBoundingClientRect().width;
-    const height = Math.max(600, width * 0.6);
+    const height = Math.max(450, width * 0.5);
 
     const svg = d3.select('#animated-map-svg')
         .attr('width', width)
