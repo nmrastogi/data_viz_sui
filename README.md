@@ -2,6 +2,8 @@
 
 An interactive web visualization showcasing suicide statistics by US state from 2014-2023.
 
+🌐 **Live Demo**: [https://nmrastogi.github.io/data_viz_sui](https://nmrastogi.github.io/data_viz_sui)
+
 ## Features
 
 ### Main Dashboard (`index.html`)
@@ -130,6 +132,8 @@ data_viz_sui/
 ```
 
 ## Deployment
+
+This project is currently deployed and live at: **https://nmrastogi.github.io/data_viz_sui**
 
 This is a static website that can be deployed to:
 - **GitHub Pages** (Recommended): See deployment instructions below
