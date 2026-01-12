@@ -110,9 +110,9 @@ function setupControls() {
         updateAllVisualizations();
     });
 
-    // Metric toggle
-    d3.selectAll('.toggle-btn').on('click', function() {
-        d3.selectAll('.toggle-btn').classed('active', false);
+    // Metric toggle (only for metric toggle buttons, not navigation buttons)
+    d3.selectAll('#metric-toggle .toggle-btn').on('click', function() {
+        d3.selectAll('#metric-toggle .toggle-btn').classed('active', false);
         d3.select(this).classed('active', true);
         selectedMetric = d3.select(this).attr('data-metric');
         
@@ -179,7 +179,8 @@ function setupControls() {
     });
 
     // Open combined race visualizations in new page
-    d3.select('#open-race-combined-btn').on('click', function() {
+    d3.select('#open-race-combined-btn').on('click', function(event) {
+        event.stopPropagation();
         window.open('race-combined.html', '_blank');
     });
 
